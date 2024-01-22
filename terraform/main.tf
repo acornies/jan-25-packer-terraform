@@ -1,13 +1,30 @@
-resource "tfe_project" "jan25_marketing" {
-  organization = var.organization
-  name = "jan25-compliant-infra"
+# us-east-2 region
+resource "aws_vpc" "vpc_east" {
+  cidr_block           = var.cidr_vpc_east
+  enable_dns_support   = true
+  enable_dns_hostnames = true
 }
 
-resource "tfe_workspace" "jan25_marketing" {
-  name = "web-app1-dev"
-  organization = var.organization
-  auto_apply = false
-  queue_all_runs = true
-  working_directory = "terraform"
-  project_id = tfe_project.jan25_marketing.id
+resource "aws_internet_gateway" "igw_east" {
+  vpc_id = aws_vpc.vpc_east.id
+}
+
+resource "aws_subnet" "subnet_public_east" {
+  vpc_id            = aws_vpc.vpc_east.id
+  cidr_block        = var.cidr_subnet_east
+  availability_zone = "us-east-2a"
+}
+
+resource "aws_route_table" "rtb_public_east" {
+  vpc_id = aws_vpc.vpc_east.id
+
+  route {
+    cidr_block = "0.0.0.0/0"
+    gateway_id = aws_internet_gateway.igw_east.id
+  }
+}
+
+resource "aws_route_table_association" "rta_subnet_public_east" {
+  subnet_id      = aws_subnet.subnet_public_east.id
+  route_table_id = aws_route_table.rtb_public_east.id
 }
