@@ -85,8 +85,8 @@ data "hcp_packer_image" "web_servers" {
 }
 
 resource "aws_instance" "web_servers" {
-#   ami           = data.hcp_packer_image.web_servers.cloud_image_id
-    ami           = "ami-04a70e396066716f2"
+  ami           = data.hcp_packer_image.web_servers.cloud_image_id
+    # ami           = "ami-04a70e396066716f2"
   instance_type = "t2.micro"
   subnet_id     = aws_subnet.subnet_public_east.id
   vpc_security_group_ids = [
