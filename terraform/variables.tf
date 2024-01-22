@@ -18,17 +18,12 @@ variable "region_east" {
   default     = "us-east-2"
 }
 
-variable "hcp_bucket_loki" {
-  description = "HCP Packer bucket name for loki image"
-  default     = "learn-packer-hcp-loki-image"
-}
-
-variable "hcp_bucket_hashicups" {
+variable "hcp_packer_bucket" {
   description = "HCP Packer bucket name for base golden image"
   default     = "learn-packer-hcp-hashicups-image"
 }
 
-variable "hcp_channel" {
+variable "hcp_packer_channel" {
   description = "HCP Packer channel name"
   default     = "production"
 }
