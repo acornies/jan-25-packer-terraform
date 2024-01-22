@@ -9,7 +9,7 @@ packer {
 
 variable "version" {
   type    = string
-  default = "1.0.1"
+  default = "1.0.2"
 }
 
 data "hcp-packer-iteration" "base-image" {
@@ -59,6 +59,11 @@ Some nice description about the image being published to HCP Packer Registry.
       "sudo apt-get install -y nginx",
       "sudo systemctl start nginx"
     ]
+  }
+
+  provisioner "file" {
+    source      = "index.html"
+    destination = "/var/www/html/index.html"
   }
 
   sources = [
