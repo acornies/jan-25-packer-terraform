@@ -89,6 +89,7 @@ resource "aws_instance" "web_servers" {
     # ami           = "ami-04a70e396066716f2"
   instance_type = "t2.micro"
   subnet_id     = aws_subnet.subnet_public_east.id
+  key_name = var.key_name
   vpc_security_group_ids = [
     aws_security_group.ssh_east.id,
     aws_security_group.allow_egress_east.id,

@@ -27,3 +27,8 @@ variable "hcp_packer_channel" {
   description = "HCP Packer channel name"
   default     = "production"
 }
+
+variable "key_name" {
+  description = "The name of the AWS key pair to use for SSH access to the EC2 instances"
+  default     = "packer-demo"
+}
