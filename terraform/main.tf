@@ -1,3 +1,7 @@
+provider "aws" {
+  region = "us-east-2"
+}
+
 # us-east-2 region
 resource "aws_vpc" "vpc_east" {
   cidr_block           = var.cidr_vpc_east
