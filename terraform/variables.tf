@@ -32,3 +32,12 @@ variable "key_name" {
   description = "The name of the AWS key pair to use for SSH access to the EC2 instances"
   default     = "packer-demo"
 }
+
+variable "backend_servers" {
+  description = "A list of backend servers"
+  type        = list(string)
+  default = [
+    "learn-packer-jan25-backend-server01",
+    "learn-packer-jan25-backend-server02"
+  ]
+}
