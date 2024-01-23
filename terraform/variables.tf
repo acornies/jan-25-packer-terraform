@@ -33,11 +33,13 @@ variable "key_name" {
   default     = "packer-demo"
 }
 
+
+# make a variable that for backend_servers a map of any type
 variable "backend_servers" {
-  description = "A list of backend servers"
-  type        = list(string)
-  default = [
-    "learn-packer-jan25-backend-server01",
-    "learn-packer-jan25-backend-server02"
-  ]
+    description = "A list of backend servers"
+    type        = map(any)
+    default = {
+        "learn-packer-jan25-backend-server01" = {}
+        "learn-packer-jan25-backend-server02" = {}
+    }
 }
