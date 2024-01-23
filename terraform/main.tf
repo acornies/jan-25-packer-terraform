@@ -84,12 +84,11 @@ data "hcp_packer_image" "web_servers" {
   region         = var.region_east
 }
 
-resource "aws_instance" "web_servers" {
+resource "aws_instance" "web_servers_packer" {
   ami           = data.hcp_packer_image.web_servers.cloud_image_id
-    # ami           = "ami-04a70e396066716f2"
   instance_type = "t2.micro"
   subnet_id     = aws_subnet.subnet_public_east.id
-  key_name = var.key_name
+  key_name      = var.key_name
   vpc_security_group_ids = [
     aws_security_group.ssh_east.id,
     aws_security_group.allow_egress_east.id,
@@ -98,6 +97,24 @@ resource "aws_instance" "web_servers" {
   associate_public_ip_address = true
 
   tags = {
-    Name = "Learn-Packer-web_servers"
+    Name = "learn-packer-jan25-web-server01"
+  }
+}
+
+# harded coded ami
+resource "aws_instance" "web_servers_static" {
+  ami           = "ami-04a70e396066716f2"
+  instance_type = "t2.micro"
+  subnet_id     = aws_subnet.subnet_public_east.id
+  key_name      = var.key_name
+  vpc_security_group_ids = [
+    aws_security_group.ssh_east.id,
+    aws_security_group.allow_egress_east.id,
+    aws_security_group.http_east.id,
+  ]
+  associate_public_ip_address = false
+
+  tags = {
+    Name = "learn-packer-jan25-web-server02"
   }
 }

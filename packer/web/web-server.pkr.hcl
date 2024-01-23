@@ -52,18 +52,18 @@ Some nice description about the image being published to HCP Packer Registry.
     }
   }
 
-  provisioner "shell" {
-    inline = [
-      "sleep 10",
-      "sudo apt-get update",
-      "sudo apt-get install -y nginx",
-      "sudo systemctl start nginx"
-    ]
-  }
-
   provisioner "file" {
     source      = "index.html"
-    destination = "/var/www/html/index.html"
+    destination = "/tmp/index.html"
+  }
+
+  provisioner "shell" {
+    inline = [
+      "sudo apt-get update",
+      "sudo apt-get install -y nginx",
+      "sudo cp /tmp/index.html /var/www/html/index.html",
+      "sudo systemctl start nginx"
+    ]
   }
 
   sources = [

@@ -9,7 +9,7 @@ packer {
 
 variable "version" {
   type    = string
-  default = "1.0.0"
+  default = "1.0.1"
 }
 
 data "amazon-ami" "ubuntu-jammy-east" {
@@ -47,6 +47,14 @@ Some nice description about the image being published to HCP Packer Registry.
       "build-source" = basename(path.cwd)
     }
   }
+
+provisioner "shell" {
+    inline = [
+      "sudo apt-get update",
+      "sudo apt-get install -y dnsutils",
+    ]
+  }
+
   sources = [
     "source.amazon-ebs.ubuntu-jammy-east-base"
   ]
