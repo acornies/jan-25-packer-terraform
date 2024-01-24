@@ -34,12 +34,20 @@ resource "aws_instance" "web_servers_frontend" {
     Name = each.key
   }
 
-  # turn on health check in Terraform Cloud
-  lifecycle {
-    postcondition {
-      condition = data.hcp_packer_image.web_servers.revoke_at == null
-      error_message = "Source AMI is revoked."
-    }
+  # uncomment if you want to use this during plan phase
+  #   lifecycle {
+  #     precondition {
+  #       condition = data.hcp_packer_image.web_servers.revoke_at == null
+  #       error_message = "Source AMI is revoked."
+  #     }
+  #   }
+
+}
+
+check "revoke_check" {
+  assert {
+    condition     = data.hcp_packer_image.web_servers.revoke_at == null
+    error_message = "Source AMI is revoked."
   }
 }
 
