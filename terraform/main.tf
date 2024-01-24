@@ -40,6 +40,10 @@ resource "aws_instance" "web_servers_frontend" {
       condition = data.hcp_packer_image.web_servers.revoke_at == null
       error_message = "Source AMI is revoked."
     }
+    postcondition {
+      condition = data.hcp_packer_image.web_servers.revoke_at == null
+      error_message = "Source AMI is revoked."
+    }
   }
 }
 
