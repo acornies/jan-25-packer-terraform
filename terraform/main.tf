@@ -33,6 +33,17 @@ resource "aws_instance" "web_servers_frontend" {
   tags = {
     Name = each.key
   }
+
+  # turn on health check in Terraform Cloud
+  lifecycle {
+    precondition {
+      condition = try(
+        formatdate("YYYYMMDDhhmmss", data.hcp_packer_image.web_servers.revoke_at) > formatdate("YYYYMMDDhhmmss", timestamp()),
+        data.hcp_packer_image.web_servers.revoke_at == null
+      )
+      error_message = "Source AMI is revoked."
+    }
+  }
 }
 
 # harded coded amis
