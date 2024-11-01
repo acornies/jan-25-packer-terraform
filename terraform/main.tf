@@ -27,6 +27,7 @@ resource "aws_instance" "web_servers_frontend" {
     aws_security_group.ssh_east.id,
     aws_security_group.allow_egress_east.id,
     aws_security_group.http_east.id,
+    aws_security_group.ldap_east.id
   ]
   associate_public_ip_address = true
 

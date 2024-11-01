@@ -59,7 +59,6 @@ resource "aws_security_group" "ldap_east" {
   name   = "ldap_389"
   vpc_id = aws_vpc.vpc_east.id
 
-  # SSH access from the VPC
   ingress {
     from_port   = 389
     to_port     = 389
