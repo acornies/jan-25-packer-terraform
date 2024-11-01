@@ -55,6 +55,20 @@ resource "aws_security_group" "http_east" {
   }
 }
 
+resource "aws_security_group" "ldap_east" {
+  name   = "ldap_389"
+  vpc_id = aws_vpc.vpc_east.id
+
+  # SSH access from the VPC
+  ingress {
+    from_port   = 389
+    to_port     = 389
+    protocol    = "tcp"
+    # cidr_blocks = ["10.1.0.0/24"]
+    cidr_blocks = ["0.0.0.0/0"]
+  }
+}
+
 resource "aws_security_group" "allow_egress_east" {
   name   = "allow_egress"
   vpc_id = aws_vpc.vpc_east.id
