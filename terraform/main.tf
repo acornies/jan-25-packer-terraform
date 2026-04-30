@@ -4,22 +4,23 @@ provider "aws" {
 
 provider "hcp" {}
 
-data "hcp_packer_iteration" "web_servers" {
-  bucket_name = var.hcp_packer_bucket
-  channel     = var.hcp_packer_channel
+data "hcp_packer_version" "web_servers" {
+  bucket_name  = var.hcp_packer_bucket
+  channel_name = var.hcp_packer_channel
 }
 
-data "hcp_packer_image" "web_servers" {
-  bucket_name    = data.hcp_packer_iteration.web_servers.bucket_name
-  iteration_id   = data.hcp_packer_iteration.web_servers.ulid
-  cloud_provider = "aws"
-  region         = var.region_east
+data "hcp_packer_artifact" "web_servers" {
+  bucket_name = data.hcp_packer_version.web_servers.bucket_name
+  # iteration_id   = data.hcp_packer_version.web_servers.ulid
+  version_fingerprint = data.hcp_packer_version.web_servers.fingerprint
+  platform            = "aws"
+  region              = var.region_east
 }
 
 # packer channel example
 resource "aws_instance" "web_servers_frontend" {
   for_each      = var.frontend_servers
-  ami           = data.hcp_packer_image.web_servers.cloud_image_id
+  ami           = data.hcp_packer_artifact.web_servers.id
   instance_type = "t2.micro"
   subnet_id     = aws_subnet.subnet_public_east.id
   key_name      = var.key_name
@@ -32,14 +33,14 @@ resource "aws_instance" "web_servers_frontend" {
   associate_public_ip_address = true
 
   tags = {
-    Name = each.key
+    Name        = each.key
     Environment = var.environment_tag
   }
 
   # uncomment if you want to use this during plan phase
   #   lifecycle {
   #     precondition {
-  #       condition = data.hcp_packer_image.web_servers.revoke_at == null
+  #       condition = data.hcp_packer_artifact.web_servers.revoke_at == null
   #       error_message = "Source AMI is revoked."
   #     }
   #   }
@@ -48,7 +49,7 @@ resource "aws_instance" "web_servers_frontend" {
 
 check "revoke_check" {
   assert {
-    condition     = data.hcp_packer_image.web_servers.revoke_at == null
+    condition     = data.hcp_packer_artifact.web_servers.revoke_at == null
     error_message = "Source AMI is revoked."
   }
 }
