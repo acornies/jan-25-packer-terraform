@@ -20,7 +20,7 @@ data "hcp_packer_artifact" "web_servers" {
 # packer channel example
 resource "aws_instance" "web_servers_frontend" {
   for_each      = var.frontend_servers
-  ami           = data.hcp_packer_artifact.web_servers.id
+  ami           = data.hcp_packer_artifact.web_servers.external_identifier
   instance_type = "t2.micro"
   subnet_id     = aws_subnet.subnet_public_east.id
   key_name      = var.key_name
