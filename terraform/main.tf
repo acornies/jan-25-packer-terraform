@@ -33,6 +33,7 @@ resource "aws_instance" "web_servers_frontend" {
 
   tags = {
     Name = each.key
+    Environment = var.environment_tag
   }
 
   # uncomment if you want to use this during plan phase
